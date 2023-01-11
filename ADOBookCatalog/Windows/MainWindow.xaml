@@ -1,0 +1,85 @@
+﻿<Window x:Class="ADOBookCatalog.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ADOBookCatalog"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="Window_Loaded"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <ComboBox
+            Name="AuthorsCombobox"
+            materialDesign:HintAssist.Hint="Authors"
+            Margin="10"
+            Width="100"
+            SelectionChanged="AuthorsCombobox_SelectionChanged"
+            >
+            </ComboBox>
+
+            <ComboBox
+            Name="CategoriesCombobox"
+            IsEnabled="False"
+            materialDesign:HintAssist.Hint="Categories"
+            Width="100" 
+            SelectionChanged="CategoriesCombobox_SelectionChanged"
+            >
+            </ComboBox>
+            <TextBox
+                Name="SearchTxt"
+            Grid.Column="1"
+            Margin="10"
+            materialDesign:HintAssist.Hint="Book Name"
+            BorderThickness="1"
+            MinWidth="100"
+            VerticalAlignment="Center" />
+            <Button
+                Height="25"
+                Width="25"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                ToolTip="Search Book" Click="ButtonSearch_Click">
+                <materialDesign:PackIcon
+                Kind="Search"
+                Height="20"
+                Width="20" />
+            </Button>
+
+            <Button
+                Margin="20 0"
+            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+            Content="Add Book" Click="ButtonAdd_Click"/>
+
+            <Button
+                Margin="10"
+            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+            Content="Delete" Click="ButtonDelete_Click"/>
+            <Button
+                Margin="10"
+            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+            Content="Update" Click="ButtonUpdate_Click"/>
+        </StackPanel>
+
+        <ListView SelectionMode="Single" Name="ListBooks" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="10" Text="{Binding Id}"></TextBlock>
+                        <TextBlock Margin="10" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Margin="10" Text="{Binding Pages}"></TextBlock>
+                        <TextBlock Margin="10" Text="{Binding YearPress}"></TextBlock>
+                        <TextBlock Margin="10" Text="{Binding Comment}"></TextBlock>
+                        <TextBlock Margin="10" Text="{Binding Quantity}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>
