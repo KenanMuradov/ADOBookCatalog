@@ -1,5 +1,6 @@
 ﻿using ADOBookCatalog.Models;
 using ADOBookCatalog.Windows;
+using ControlzEx.Standard;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -67,6 +68,8 @@ public partial class MainWindow : Window
 
         CategoriesCombobox.Items.Clear();
 
+        SqlDataReader? result = null;
+
         try
         {
             connection?.Open();
@@ -74,7 +77,7 @@ public partial class MainWindow : Window
             var id = AuthorsCombobox.SelectedItem.ToString().Split(' ')[0];
 
             using SqlCommand command = new SqlCommand($"SELECT DISTINCT Categories.[Name] FROM Categories\r\nJOIN Books ON Id_Category = Categories.Id\r\nJOIN Authors ON Id_Author = Authors.Id\r\nWHERE Authors.Id = {id}", (SqlConnection)connection);
-            var result = command.ExecuteReader();
+            result = command.ExecuteReader();
 
             while (result.Read())
                 CategoriesCombobox.Items.Add(result["Name"] as string);
@@ -87,6 +90,7 @@ public partial class MainWindow : Window
         finally
         {
             connection?.Close();
+            result?.Close();
         }
     }
 
@@ -94,6 +98,8 @@ public partial class MainWindow : Window
     {
         if (CategoriesCombobox.Items.IsEmpty)
             return;
+
+        SqlDataReader? result = null;
 
         try
         {
@@ -103,7 +109,7 @@ public partial class MainWindow : Window
             var name = CategoriesCombobox.SelectedItem.ToString();
 
             using SqlCommand command = new SqlCommand($"SELECT * FROM Books\r\nJOIN Categories ON Categories.Id = Id_Category \r\nJOIN Authors ON Authors.Id = Id_Author \r\nWHERE Categories.Name = '{name}' AND Id_Author = {id}\r\n", (SqlConnection)connection);
-            var result = command.ExecuteReader();
+            result = command.ExecuteReader();
 
             ListBooks.Items.Clear();
 
@@ -131,6 +137,7 @@ public partial class MainWindow : Window
         finally
         {
             connection?.Close();
+            result?.Close();
         }
     }
 
@@ -139,12 +146,14 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(SearchTxt.Text))
             return;
 
+        SqlDataReader? result = null;
+
         try
         {
             connection?.Open();
 
             using SqlCommand command = new SqlCommand($"SELECT * FROM Books\r\nWHERE Name LIKE '%{SearchTxt.Text}%'", (SqlConnection)connection);
-            var result = command.ExecuteReader();
+            result = command.ExecuteReader();
 
             ListBooks.Items.Clear();
 
@@ -172,6 +181,7 @@ public partial class MainWindow : Window
         finally
         {
             connection?.Close();
+            result?.Close();
         }
     }
 
